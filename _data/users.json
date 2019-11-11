@@ -1,0 +1,43 @@
+[
+    {
+		"_id": "5d7a514b5d2c12c7449be042",
+		"name": {
+			"firstName":"Admin",
+			"lastName": "Account"
+			},
+		"email": "admin@gmail.com",
+		"status": "admin",
+		"password": "12345678"
+	},
+	{
+		"_id": "5d7a514b5d2c12c7449be043",
+		"name": {
+			"firstName":"Pro",
+			"lastName": "Account"
+			},
+		"email": "pro@gmail.com",
+		"status": "pro",
+		"password": "12345678"
+	},
+	{
+		"_id": "5d7a514b5d2c12c7449be044",
+		"name":  {
+			"firstName":"User",
+			"lastName": "Account"
+			},
+		"email": "user@gmail.com",
+		"status": "user",
+		"password": "12345678"
+	},
+	
+	{
+		"_id": "5d7a514b5d2c12c7449be045",
+		"name":  {
+			"firstName":"NGUYEN",
+			"lastName": "Manh Hoang"
+			},
+		"email": "nguyenhoang56ksgt@gmail.com",
+		"status": "admin",
+		"password": "12345678"
+	}
+]

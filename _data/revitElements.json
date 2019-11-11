@@ -1,0 +1,87 @@
+[
+    {
+        "project":"5d713995b721c3bb38c1f5d0",
+        "guid":"a81b684b-24dc-4158-ba7e-af4aa8cb3727-0025c10b",
+        "version":"5d713995b721c3bb38c1f5d0",
+        "location":[
+            {
+            "X":121,
+            "Y":341,
+            "Z":561
+            },
+            {
+                "X":122,
+                "Y":342,
+                "Z":562
+            }
+        ],
+        "boundingBox":[
+            {
+                "X":121,
+                "Y":341,
+                "Z":561
+                },
+                {
+                    "X":122,
+                    "Y":342,
+                    "Z":562
+                }
+        ],
+        "centroid":{
+            "X":221,
+            "Y":222,
+            "Z":223
+        },
+        "typeId":"123456",
+        "volume":5555,
+        "properties":{
+            "volume":1223,
+            "longeur":222
+        }
+    },
+   { "_id": "5dc7d14e0434f54cdc7f8f75",
+    "project": "5d713995b721c3bb38c1f5d0",
+    "guid": "a81b684b-24dc-4158-ba7e-af4aa8cb3727-0025c10a",
+    "version": "5d713995b721c3bb38c1f5d0",
+    "location": [
+        {
+            "_id": "5dc7d14e0434f54cdc7f8f77",
+            "X": 121,
+            "Y": 341,
+            "Z": 561
+        },
+        {
+            "_id": "5dc7d14e0434f54cdc7f8f76",
+            "X": 122,
+            "Y": 342,
+            "Z": 562
+        }
+    ],
+    "boundingBox": [
+        {
+            "_id": "5dc7d14e0434f54cdc7f8f79",
+            "X": 121,
+            "Y": 341,
+            "Z": 561
+        },
+        {
+            "_id": "5dc7d14e0434f54cdc7f8f78",
+            "X": 122,
+            "Y": 342,
+            "Z": 562
+        }
+    ],
+    "centroid": {
+        "_id": "5dc7d14e0434f54cdc7f8f7a",
+        "X": 221,
+        "Y": 222,
+        "Z": 223
+    },
+    "typeId": "123456",
+    "volume": 5555,
+    "properties":{
+        "hauter":1223,
+        "longeur":222
+    }
+}
+]
