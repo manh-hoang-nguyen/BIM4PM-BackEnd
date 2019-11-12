@@ -15,7 +15,25 @@ exports.getElements= asyncHandler(async (req,res, next)=>{
         const {projectId, guid} = req.params;
         
         let elements; 
+
+        // const reqQuery={...req.query};
+
+        // //Fields to exclude
+        // const removeFields=['select'];
+    
+        // //Loop over removeFields and delete them from reqQuery
+        // removeFields.forEach(param=> delete reqQuery[param])   
         
+        //  //Select Fields
+        //     if (req.query.select) {
+                
+        //         const fields = req.query.select.split(',');
+                
+        //         query.select(fields);
+                
+        //     }
+
+
         if( typeof guid !== 'undefined'){
              
             elements = await RevitElement.find({project:projectId, guid:guid});
