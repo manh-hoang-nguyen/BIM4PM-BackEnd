@@ -39,7 +39,7 @@ const ProjectSchema = mongoose.Schema({
 
 
 //Cascade delete Modification, Element, Comment when Project is deleted
-ProjectSchema.pre('remove', async function(next){
+ProjectSchema.pre('remove', true, async function(next){
     console.log(`Modifications, Elements, Comments, Versions being removed from projects ${this._id}`);
     await this.model('Version').deleteMany({project:this._id});
     await this.model('Modification').deleteMany({project:this._id});
@@ -48,7 +48,7 @@ ProjectSchema.pre('remove', async function(next){
     next();
 })
 
-ProjectSchema.pre('save', async function(next){
+ProjectSchema.pre('save', true, async function(next){
     await this.model('Version').create({project: this._id})
     next();
 })
