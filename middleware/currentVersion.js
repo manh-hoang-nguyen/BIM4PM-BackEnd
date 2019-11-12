@@ -1,3 +1,4 @@
+const ErrorReponse = require('../utils/errorReponse')
 const Version = require('../models/Version');
 const asyncHandler = require('./asyncHandler');
 
@@ -6,7 +7,8 @@ exports.currentVersion = asyncHandler(async (req,res, next)=>{
 
     const currentVersion = versions.versions[versions.versions.length-1];
  
-    req.body.currentVersion = currentVersion._id;
+    if(typeof currentVersion == 'undefined') return next(new ErrorReponse(`No version of project is not created yet`))
+    req.currentVersion = currentVersion._id;
 
     next();
 })

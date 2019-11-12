@@ -48,10 +48,11 @@ ProjectSchema.pre('remove', async function(next){
     next();
 })
 
-ProjectSchema.pre('save', async function(next){
-    await this.model('Version').create({project: this._id})
-    next();
-})
+// ProjectSchema.pre('save', async function(next){
+//     await this.model('Version').create({project: this._id})
+//     next();
+// })
+
 //reverse polulate with virtuals
 ProjectSchema.virtual('versions',{
     ref:'Version',

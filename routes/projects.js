@@ -37,10 +37,9 @@ router
     .get(protect, getUserProjects)
     .post(protect, createProject);
 
-router
-
-.route('/all')
-.get(advancedResults(Project,'versions'), getProjects)
+router 
+    .route('/all')
+    .get(advancedResults(Project,'versions'), getProjects)
 router
     .route('/:id')
     .get(protect, getProject)

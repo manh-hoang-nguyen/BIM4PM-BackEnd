@@ -8,7 +8,7 @@ const advancedResults= require('../middleware/advancedResults');
 const {protect} = require('../middleware/auth');
 
 const {
-    getElements,
+    getElementsOfCurrentVersion,
     createElement
 } = require('../controllers/revitElements')
 
@@ -18,7 +18,7 @@ const router = express.Router({mergeParams: true});
 
 router 
     .route('/elements')
-    .get(advancedResults(RevitElement),getElements)
+    .get(advancedResults(RevitElement), currentVersion, getElementsOfCurrentVersion)
     .post(protect, currentVersion, createElement);
 
 module.exports = router;

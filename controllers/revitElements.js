@@ -5,15 +5,16 @@ const RevitElement = require('../models/RevitElement');
 const Project = require('../models/Project');
 const CheckUserRole = require('../utils/checkUserRole');
 
-//@desc     Get all elements of project 
-//@route    GET /api/v1/projects/:projectId/elements/guid/:guid
-//@access   Public
-
-exports.getElements= asyncHandler(async (req,res, next)=>{
+//@desc     Get elements of project of current version
+//@route    GET /api/v1/projects/:projectId/elements  ==> get all elements
+//@route    GET /api/v1/projects/:projectId/elements/guid/:guid ==> get a specific element
+//@access   Public 
+exports.getElementsOfCurrentVersion= asyncHandler(async (req,res, next)=>{
    
      
         const {projectId, guid} = req.params;
         
+        const currentVersion = req.currentVersion;
         let elements; 
 
         // const reqQuery={...req.query};
@@ -36,11 +37,11 @@ exports.getElements= asyncHandler(async (req,res, next)=>{
 
         if( typeof guid !== 'undefined'){
              
-            elements = await RevitElement.find({project:projectId, guid:guid});
+            elements = await RevitElement.find({project:projectId, guid:guid, version: currentVersion});
         }
         else{  
             
-            elements = await RevitElement.find({project: projectId})
+            elements = await RevitElement.find({project: projectId, version: currentVersion})
         }
        
         res.status(200).json({
@@ -51,17 +52,16 @@ exports.getElements= asyncHandler(async (req,res, next)=>{
    
 })
 
-//@desc     Create modification
+//@desc     Create Revit element with current version
 //@route    POST /api/v1/projects/:projectId/elements/guid/:guid
-//@access   Public
-
+//@access   Public 
 exports.createElement = asyncHandler(async (req,res, next)=>{
     
     const {projectId, guid} = req.params;
     
     req.body.project = projectId;
     req.body.guid = guid;
-    req.body.version = req.body.currentVersion;
+    req.body.version = req.currentVersion;
 
    
     const element = await RevitElement.findOneAndUpdate({
