@@ -107,6 +107,7 @@ exports.deleteProjectVersion = asyncHandler(async (req,res, next)=>{
 
     let version = await Version.findOne({project:req.params.projectId});
     
+    if(!version) return next(new ErrorResponse(`Version ${req.body.version} of project ${req.params.projectId} is not found`));
     //Delete elements of version
     let deletedVersionId;
     version.versions.forEach(version => {
