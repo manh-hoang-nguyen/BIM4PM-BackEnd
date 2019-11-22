@@ -78,7 +78,7 @@ exports.updateProject = asyncHandler(async (req, res, next)=>{
     let project = await Project.findById(req.params.id);
 
     if(!project){
-        return next(ErrorResponse(`Project not found with id of ${req.params.id}`, 404))
+        return next(new ErrorResponse(`Project not found with id of ${req.params.id}`, 404))
     }
 
      //Make sure user is project owner
@@ -102,7 +102,7 @@ exports.deleteProject = asyncHandler(async (req, res, next)=>{
     let project = await Project.findById(req.params.id);
 
     if(!project){
-        return next(ErrorResponse(`Project not found with id of ${req.params.id}`, 404))
+        return next(new ErrorResponse(`Project not found with id of ${req.params.id}`, 404))
     }
 
      //Make sure user is project owner
