@@ -10,7 +10,7 @@ router.post('/login', login);
 
 router.get('/logout', logout);
 
-router.post('/me',protect, getMe)
+router.get('/me',protect, getMe)
 
 router.post('/forgotpassword', forgotPassword);
 

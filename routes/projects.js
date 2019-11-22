@@ -28,7 +28,8 @@ const router = express.Router();
 //Re-route into other resource routers
 router.use('/:projectId/versions', versionRouter);
 router.use('/:projectId/modifications', modificationRouter);
-router.use('/:projectId/guid/:guid', elementRouter);
+router.use('/:projectId/guid/:guid/elements', elementRouter);
+router.use('/:projectId/elements', elementRouter);
 router.use('/:projectId/guid/:guid', commentRouter);
 
 

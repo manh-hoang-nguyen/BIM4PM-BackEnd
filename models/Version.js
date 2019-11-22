@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
-
-const Comparision = require('./RevitElement');
+ 
 
 const VersionSchema = mongoose.Schema({
     project:{
@@ -32,6 +31,22 @@ const VersionSchema = mongoose.Schema({
     }]
    
 },{timestamps:true})
+
+VersionSchema.statics.findByVersion = function(projectId, version, callback){
+     
+     this.findOne({project: projectId}, function(err, items){
+         
+        items.versions.forEach(item=>{
+       
+           if (item.version==version) { 
+               
+               return (item, callback);
+            }    
+       })
+    })
+   
+     
+}
 
 VersionSchema.index({project:1}); //indexing  
 module.exports =mongoose.model('Version',VersionSchema);

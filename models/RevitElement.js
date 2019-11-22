@@ -8,21 +8,29 @@ const RevitElementSchema = mongoose.Schema({
         ref:'Project',
         required:[true, 'Please add project id']
     },
-    guid:{
-        type:String,
-        required:[true, 'Please add project guid']
-    },
+
     version:{
         type:mongoose.Schema.ObjectId,
         ref:'Version',
         required:[true, 'Please define the version']
     },
     
+    guid:{
+        type:String,
+        required:[true, 'Please add project guid']
+    },
+    
+    
     location:[Point],
+
     boundingBox:[Point],
+ 
     centroid:Point,
+
     typeId:String,
+
     volume:Number,
+
     properties:{
         type:Object     
     }

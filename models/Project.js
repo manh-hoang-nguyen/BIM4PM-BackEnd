@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
- 
+
+
 const ProjectSchema = mongoose.Schema({
     name:{
         type:String,
@@ -45,14 +46,34 @@ ProjectSchema.pre('remove', async function(next){
     await this.model('Modification').deleteMany({project:this._id});
     await this.model('RevitElement').deleteMany({project:this._id});
     await this.model('Comment').deleteMany({project:this._id});
+
+    // When project created, update user's projects
+    let update ={
+        $pull:{
+            projects:{
+                project: this._id
+            }}
+   }
+    
+   await this.model('User').findOneAndUpdate({_id: this.owner}, update);
+   
     next();
 })
 
-// ProjectSchema.pre('save', async function(next){
-//     await this.model('Version').create({project: this._id})
-//     next();
-// })
-
+ // When project created, update user's projects and create project version
+ ProjectSchema.pre('save', async function( next){
+    let update ={
+         $push:{
+             projects:{
+                 project: this._id
+        }}
+    }
+     
+    await this.model('User').findOneAndUpdate({_id: this.owner}, update);
+    await this.model('Version').create({project: this._id});
+    next();
+ })
+ 
 //reverse polulate with virtuals
 ProjectSchema.virtual('versions',{
     ref:'Version',

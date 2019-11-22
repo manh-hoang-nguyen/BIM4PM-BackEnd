@@ -34,8 +34,9 @@ const comments=JSON.parse(fs.readFileSync(`${__dirname}/_data/comments.json`,'ut
 //Import into DB
 const importData=async()=>{
     try {
-        await Project.create(projects);
         await User.create(users);
+        await Project.create(projects);
+       
         await Modification.create(modifications);
         //await Version.create(versions);
         await RevitElement.create(revitElements);

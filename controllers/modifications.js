@@ -41,7 +41,7 @@ exports.createModification = asyncHandler(async (req,res, next)=>{
     const {projectId, guid} = req.params;
    
     req.body.createdBy = req.user.id;
-    req.body.version = req.body.currentVersion;
+    req.body.version = req.currentVersion._id;
     console.log(req.body)
     console.log(req.body.text)
     const options={

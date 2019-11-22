@@ -17,6 +17,7 @@ const UserSchema = new mongoose.Schema({
     },
     email:{
         type:String,
+        lowercase: true,
         required:[true, 'Please add an email'],
         unique:true,
         match:[
@@ -35,6 +36,12 @@ const UserSchema = new mongoose.Schema({
         minlength:8,
         select:false
     },
+    projects:[{
+        project:{
+            type: mongoose.Schema.Types.ObjectId,
+            ref:'Project'
+        }      
+    }],
     resetPasswordToken: String,
     resetPasswordExpire:Date 
 },{timestamps:true})
@@ -47,6 +54,7 @@ UserSchema.pre('save', async function(next){
 
     const salt = await bcrypt.genSalt(10);
     this.password = await bcrypt.hash(this.password, salt);
+    this.email = this.email.toLowerCase();
 })
 
 //Sign JWT and return

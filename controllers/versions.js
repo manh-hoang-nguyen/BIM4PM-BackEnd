@@ -50,38 +50,52 @@ exports.getCurrentVersion = asyncHandler(async (req,res, next)=>{
 //@route    POST /api/v1/projects/:projectId/versions
 //@access   Private 
 exports.createVersion = asyncHandler(async (req,res, next)=>{
+   const {projectId} = req.params;
+
     req.body.createdBy = req.user.id;
-   
-    CheckUserRole(req.params.projectId, req, next)
+    
+    CheckUserRole(projectId, req, next)
 
     let version = await Version.findOne({project:req.params.projectId});
-
-    req.body.version = version.versions.length + 1; 
-
-    version = await Version.findOneAndUpdate({project:req.params.projectId},{$push:{versions:req.body}},{
-        new: true,
-        runValidators:true
-    }) 
-
-    // duplicate element with new version
-    let oldVersion = version.versions[version.versions.length-2];
-    let newVersion = version.versions[version.versions.length-1]; 
-
-    const elements  = await RevitElement.find({project:req.params.projectId, version:oldVersion._id}); 
      
-    await elements.forEach((element)=>{  
-        element.version = newVersion._id;
-        element._id =  mongoose.Types.ObjectId();
-        element.isNew = true;
-        element.save();
+     
+        req.body.version = version.versions.length + 1;
          
-    });
+        if(req.body.version > 1){
+            try {
+                 // duplicate element with new version
+                let oldVersion = version.versions[version.versions.length-2];
+                let newVersion = version.versions[version.versions.length-1]; 
+
+                const elements  = await RevitElement.find({project:projectId, version:oldVersion._id}); 
+               
+                await elements.forEach((element)=>{  
+                    element.version = newVersion._id;
+                    element._id =  mongoose.Types.ObjectId();
+                    element.isNew = true;
+                    element.save();
+                    
+                });
+            } catch (error) {
+                next(new ErrorResponse(` Fail because no element in the precedent version`))
+            }
+           
+        }
+       
+
+        version = await Version.findOneAndUpdate({project:projectId},{$push:{versions:req.body}},{
+            new: true,
+            runValidators:true
+        }) 
+    
+  
+    
           
-    res.status(200).json({
+    res.status(200).json((typeof elements !== 'undefined')?{
         success: true,
         copyElement: elements.length,
         data: version
-    })
+    } : {  success: true, data: version})
 })
 
 //@desc     Delete project version 
