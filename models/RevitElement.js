@@ -1,43 +1,51 @@
-const mongoose = require('mongoose');
- 
-const Point = require('./children/Point');
+const mongoose = require("mongoose");
 
-const RevitElementSchema = mongoose.Schema({
-    project:{
-        type:mongoose.Schema.ObjectId,
-        ref:'Project',
-        required:[true, 'Please add project id']
+const Point = require("./children/Point");
+
+const RevitElementSchema = mongoose.Schema(
+  {
+    project: {
+      type: mongoose.Schema.ObjectId,
+      ref: "Project",
+      required: [true, "Please add project id"]
     },
 
-    version:{
-        type:mongoose.Schema.ObjectId,
-        ref:'Version',
-        required:[true, 'Please define the version']
+    version: {
+      type: mongoose.Schema.ObjectId,
+      ref: "Version",
+      required: [true, "Please define the version"]
     },
-    
-    guid:{
-        type:String,
-        required:[true, 'Please add project guid']
+
+    guid: {
+      type: String,
+      required: [true, "Please add project guid"]
     },
-    
-    
-    location:[Point],
+    name: String,
 
-    boundingBox:[Point],
- 
-    centroid:Point,
+    elementId: Number,
 
-    typeId:String,
+    category: String,
 
-    volume:Number,
+    level: String,
 
-    properties:{
-        type:Object     
-    }
-    
-    
-},{timestamps:true})
+    parameters: String,
 
+    sharedParameters: String,
 
-RevitElementSchema.index({project:1, guid:1, version:1}, { unique: true }); //indexing 
-module.exports = mongoose.model('RevitElement', RevitElementSchema);
+    worksetId: String,
+
+    location: String,
+
+    boundingBox: String,
+
+    centroid: String,
+
+    typeId: String,
+
+    volume: Number
+  },
+  { timestamps: true }
+);
+
+RevitElementSchema.index({ project: 1, guid: 1, version: 1 }, { unique: true }); //indexing
+module.exports = mongoose.model("RevitElement", RevitElementSchema);

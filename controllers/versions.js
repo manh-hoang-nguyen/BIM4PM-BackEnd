@@ -58,7 +58,7 @@ exports.createVersion = asyncHandler(async (req,res, next)=>{
 
     let version = await Version.findOne({project:req.params.projectId});
     
-    if(!version) return next(new ErrorResponse(`Verion is not found`));
+    if(!version) return next(new ErrorResponse(`Version is not found`));
      
         req.body.version = version.versions.length + 1;
          
