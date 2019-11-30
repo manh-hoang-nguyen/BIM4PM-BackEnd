@@ -53,11 +53,12 @@ exports.createVersion = asyncHandler(async (req,res, next)=>{
    const {projectId} = req.params;
 
     req.body.createdBy = req.user.id;
-    
+    console.log(req.user.id)
     CheckUserRole(projectId, req, next)
 
     let version = await Version.findOne({project:req.params.projectId});
-     
+    
+    if(!version) return next(new ErrorResponse(`Verion is not found`));
      
         req.body.version = version.versions.length + 1;
          
@@ -106,6 +107,7 @@ exports.deleteProjectVersion = asyncHandler(async (req,res, next)=>{
     CheckUserRole(req.params.projectId, req, next)
 
     let version = await Version.findOne({project:req.params.projectId});
+
     
     if(!version) return next(new ErrorResponse(`Version ${req.body.version} of project ${req.params.projectId} is not found`));
     //Delete elements of version

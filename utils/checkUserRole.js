@@ -13,12 +13,12 @@ const checkRole = async (projectId,req, next) =>{
         //If user role is administrator
         let userRole;
         
-        project.members.forEach(member => { 
+         project.members.forEach(member => { 
             if(member.user.toString()===req.user.id) {
                 userRole=member.role
             }  
         }); 
-        
+        console.log(userRole)
 
         if(!userRole || userRole!=='administrator'){
             return next(new ErrorResponse(`User ${req.user.email } is not authorized to this route`,401));
