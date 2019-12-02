@@ -37,8 +37,8 @@ const commentRouter = require('./routes/comments');
 app.use(express.json());
 
 //Cookie parser
-app.use(cookieParser());
-
+//app.use(cookieParser());
+app.use(bodyParser.json({ limit: '50mb' }));
 //Dev logging middleware--chi chay o moi truong dev
 if(process.env.NODE_ENV==='developement'){
     app.use(morgan('dev'));

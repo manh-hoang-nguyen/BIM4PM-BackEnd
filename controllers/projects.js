@@ -36,7 +36,10 @@ exports.getUserProjects = asyncHandler(async (req,res, next)=>{
 
 exports.getProject = asyncHandler(async (req,res, next)=>{
     
-    const project = await Project.findById(req.params.id);
+    const project = await Project.findById(req.params.id)
+                                .populate({
+                                    path: 'versions' 
+                                });
 
     
     if(!project){

@@ -108,7 +108,7 @@ exports.createElements = asyncHandler(async (req,res, next)=>{
     async.mapSeries(req.body, function iterator(item, callback){
         item.project = projectId;
         item.version = req.currentVersion._id;
-        console.log(item)
+         
         //https://mongoosejs.com/docs/api.html#model_Model.create
        new RevitElement(item, true).save( function(err, data){
             callback(err, data);
