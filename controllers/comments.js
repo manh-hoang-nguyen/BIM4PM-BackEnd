@@ -73,6 +73,10 @@ exports.createComment = asyncHandler(async (req, res, next) => {
         runValidators: true
     })
 
+   
+    if(!comments){
+        return next(new ErrorResponse(`Comments not found with guid of ${req.params.guid}`,404));
+      }
     const comment = comments.comments.id(_id);
     const data = {
         _id: comment._id,

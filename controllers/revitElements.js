@@ -111,6 +111,10 @@ exports.getHistory = asyncHandler(async (req, res, next) => {
     guid
   }).select("history").populate({path:'history.user', select:'name'});
 
+  if(!history){
+    return next(new ErrorResponse(`History not found with guid of ${req.params.guid}`,404));
+  }
+  
   res.status(200).json({
     success: true,
     data: history
