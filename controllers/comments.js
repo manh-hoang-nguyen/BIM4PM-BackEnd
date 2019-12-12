@@ -33,6 +33,9 @@ exports.getComments = asyncHandler(async (req, res, next) => {
         })
     }
 
+    if(!comments){
+        return next(new ErrorResponse(`Comments not found with guid of ${req.params.guid}`,404));
+      }
     res.status(200).json({
         success: true,
         data: comments
@@ -74,9 +77,6 @@ exports.createComment = asyncHandler(async (req, res, next) => {
     })
 
    
-    if(!comments){
-        return next(new ErrorResponse(`Comments not found with guid of ${req.params.guid}`,404));
-      }
     const comment = comments.comments.id(_id);
     const data = {
         _id: comment._id,
