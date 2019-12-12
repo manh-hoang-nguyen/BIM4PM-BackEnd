@@ -21,7 +21,7 @@ exports.getProjects = asyncHandler(async (req,res, next)=>{
 
 exports.getUserProjects = asyncHandler(async (req,res, next)=>{
      
-    const projects = await Project.find({owner: req.user.id});
+    const projects = await Project.find({owner: req.user.id}).select('-members');
     res 
         .status(200)
         .json({
@@ -39,6 +39,10 @@ exports.getProject = asyncHandler(async (req,res, next)=>{
     const project = await Project.findById(req.params.id)
                                 .populate({
                                     path: 'versions' 
+                                })
+                                .populate({
+                                    path: 'members.user',
+                                    select: 'name email'
                                 });
 
     

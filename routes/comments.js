@@ -15,7 +15,7 @@ deleteComment
 const router = express.Router({mergeParams: true});
 
 router
-    .route('/comments(/:id)?')
+    .route('/')
     .get(getComments)
     .post(protect, createComment)
     .put(protect, updateComment)

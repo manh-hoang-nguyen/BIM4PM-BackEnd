@@ -19,10 +19,10 @@ const CommentSchema = mongoose.Schema({
             type:{
                 type:String,
                 required:true,
-                enum:['comment', 'demande', 'question'],
+                enum:['comment', 'demand', 'question'],
                 default:'comment'
             },
-            createdBy:{
+            user:{
                 type:mongoose.Schema.ObjectId , //To fix bug require nested schema https://stackoverflow.com/questions/38451898/how-to-add-validation-on-mongoose-child-element-in-a-schema
                 ref:'User',
                 require:true
@@ -33,7 +33,7 @@ const CommentSchema = mongoose.Schema({
             },
             createdAt:{
                 type:Date,
-                default: Date.now
+                default: Date.now()
             },
             updatedAt:{
                 type:Date

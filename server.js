@@ -32,7 +32,7 @@ const userRouter = require('./routes/users');
 const modificationRouter = require('./routes/modifications');
 const elementRouter = require('./routes/revitElements');
 const commentRouter = require('./routes/comments');
-
+const topicRouter = require('./routes/topics');
 //Body parser 
 app.use(express.json({limit: '50mb'}));
 //app.use(express.urlencoded({limit: '50mb'}));

@@ -1,25 +1,58 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
-const Point = require("./children/Point");
+const Point = require('./children/Point');
 
 const RevitElementSchema = mongoose.Schema(
   {
     project: {
       type: mongoose.Schema.ObjectId,
-      ref: "Project",
-      required: [true, "Please add project id"]
+      ref: 'Project',
+      required: [true, 'Please add project id']
     },
 
     version: {
       type: mongoose.Schema.ObjectId,
-      ref: "Version",
-      required: [true, "Please define the version"]
-    },
-
+      ref: 'Version',
+      required: [true, 'Please define the version']
+    }, 
     guid: {
       type: String,
-      required: [true, "Please add project guid"]
+      required: [true, 'Please add project guid']
     },
+    topics:[{
+      topic:{
+        type: mongoose.Schema.ObjectId,
+        ref:'Topic'
+      }
+    }],
+    history:[{
+      modifiedAt: {
+        type: Date,
+        default: Date.now
+      },
+      user:{
+        type: mongoose.Schema.ObjectId,
+        ref:'User',
+        required: true
+      },
+      isFirstCommit:{
+        type: Boolean,
+        default:false
+      },
+      geometryChange:{
+        type: Boolean,
+        default:false
+      },
+      parameterChange:{
+        type: Boolean,
+        default:false
+      },
+      sharedParameterChange:{
+        type: Boolean,
+        default:false
+      },
+
+    }],
     name: String,
 
     elementId: String,
@@ -29,6 +62,8 @@ const RevitElementSchema = mongoose.Schema(
     level: String,
 
     parameters: String,
+    
+    geometryParameters: String,
 
     sharedParameters: String,
 
@@ -42,10 +77,18 @@ const RevitElementSchema = mongoose.Schema(
 
     typeId: String,
 
-    volume: String
-  },
-  { timestamps: true }
+    volume: String,
+    createdAt: {
+      type: Date,
+      default: Date.now()
+    },
+    updatedAt: {
+      type: Date,
+      default: Date.now()
+    },
+  } 
+   
 );
 
 RevitElementSchema.index({ project: 1, guid: 1, version: 1 }, { unique: true }); //indexing
-module.exports = mongoose.model("RevitElement", RevitElementSchema);
+module.exports = mongoose.model('RevitElement', RevitElementSchema);

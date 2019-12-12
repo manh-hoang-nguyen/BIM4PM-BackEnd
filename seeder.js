@@ -15,7 +15,7 @@ const RevitElement = require('./models/RevitElement');
  const Comment = require('./models/Comment');
 
 //Connect to DB
-mongoose.connect(process.env.MONGO_URI,{
+mongoose.connect(process.env.MONGO_URI_LOCAL,{
     useNewUrlParser:true,
     useCreateIndex:true,
     useFindAndModify:false,
@@ -37,10 +37,10 @@ const importData=async()=>{
         await User.create(users);
         await Project.create(projects);
        
-        await Modification.create(modifications);
-        //await Version.create(versions);
-        await RevitElement.create(revitElements);
-        await Comment.create(comments);
+        //await Modification.create(modifications);
+        await Version.create(versions);
+        //await RevitElement.create(revitElements);
+        //await Comment.create(comments);
         console.log('Data imported...'.green.inverse);
         process.exit();
     } catch (error) {

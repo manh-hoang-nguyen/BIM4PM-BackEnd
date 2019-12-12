@@ -53,7 +53,7 @@ exports.createVersion = asyncHandler(async (req,res, next)=>{
    const {projectId} = req.params;
 
     req.body.createdBy = req.user.id;
-    console.log(req.user.id)
+     
     CheckUserRole(projectId, req, next)
 
     let version = await Version.findOne({project:req.params.projectId});

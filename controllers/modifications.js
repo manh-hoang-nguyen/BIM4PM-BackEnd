@@ -42,8 +42,7 @@ exports.createModification = asyncHandler(async (req,res, next)=>{
    
     req.body.createdBy = req.user.id;
     req.body.version = req.currentVersion._id;
-    console.log(req.body)
-    console.log(req.body.text)
+     
     const options={
         $push:{
             modifications: req.body}
