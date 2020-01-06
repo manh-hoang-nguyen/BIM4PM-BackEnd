@@ -1,9 +1,7 @@
 const mongoose = require('mongoose');
 
-const Point = require('./children/Point');
 
-const RevitElementSchema = mongoose.Schema(
-  {
+const RevitElementSchema = mongoose.Schema({
     project: {
       type: mongoose.Schema.ObjectId,
       ref: 'Project',
@@ -14,42 +12,42 @@ const RevitElementSchema = mongoose.Schema(
       type: mongoose.Schema.ObjectId,
       ref: 'Version',
       required: [true, 'Please define the version']
-    }, 
+    },
     guid: {
       type: String,
       required: [true, 'Please add project guid']
     },
-    topics:[{
-      topic:{
+    topics: [{
+      topic: {
         type: mongoose.Schema.ObjectId,
-        ref:'Topic'
+        ref: 'Topic'
       }
     }],
-    history:[{
+    history: [{
       modifiedAt: {
         type: Date,
         default: Date.now
       },
-      user:{
+      user: {
         type: mongoose.Schema.ObjectId,
-        ref:'User',
+        ref: 'User',
         required: true
       },
-      isFirstCommit:{
+      isFirstCommit: {
         type: Boolean,
-        default:false
+        default: false
       },
-      geometryChange:{
+      geometryChange: {
         type: Boolean,
-        default:false
+        default: false
       },
-      parameterChange:{
+      parameterChange: {
         type: Boolean,
-        default:false
+        default: false
       },
-      sharedParameterChange:{
+      sharedParameterChange: {
         type: Boolean,
-        default:false
+        default: false
       },
 
     }],
@@ -62,7 +60,7 @@ const RevitElementSchema = mongoose.Schema(
     level: String,
 
     parameters: String,
-    
+
     geometryParameters: String,
 
     sharedParameters: String,
@@ -80,15 +78,39 @@ const RevitElementSchema = mongoose.Schema(
     volume: String,
     createdAt: {
       type: Date,
-      default: Date.now()
+      default: Date.now
     },
     updatedAt: {
       type: Date,
-      default: Date.now()
+      default: Date.now
     },
-  } 
-   
+  }
+
 );
 
-RevitElementSchema.index({ project: 1, guid: 1, version: 1 }, { unique: true }); //indexing
+RevitElementSchema.pre('save', async function (next) {
+  const common = await this.model("Common").findOne({
+    project: this.project
+  });
+  if (common) {
+    if (!common.category.includes(this.category))
+      common.category.push(this.category);
+    common.save();
+  } else {
+    await this.model('Common').create({
+      project: this.project,
+      category: [this.category]
+    })
+  }
+
+  next();
+})
+
+RevitElementSchema.index({
+  project: 1,
+  guid: 1,
+  version: 1
+}, {
+  unique: true
+}); //indexing
 module.exports = mongoose.model('RevitElement', RevitElementSchema);

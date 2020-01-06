@@ -13,7 +13,12 @@ const ScheduleSchema = mongoose.Schema({
       name:{
           type: String,
           require:[true, 'Please add the name of schedule']
-      }
+      },
+      data:[{
+          x:String,
+          y:String,
+          value:String
+      }]
 });
 
 ScheduleSchema.index({ project: 1}); //indexing
