@@ -101,8 +101,7 @@ RevitElementSchema.pre('save', async function (next) {
       project: this.project,
       category: [this.category]
     })
-  }
-
+  } 
   next();
 })
 
