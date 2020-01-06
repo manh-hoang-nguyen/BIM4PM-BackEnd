@@ -1,7 +1,5 @@
 const mongoose = require('mongoose');
 
-<<<<<<< HEAD
-
 const RevitElementSchema = mongoose.Schema({
     project: {
       type: mongoose.Schema.ObjectId,
@@ -19,39 +17,12 @@ const RevitElementSchema = mongoose.Schema({
       required: [true, 'Please add project guid']
     },
     topics: [{
-=======
-const RevitElementSchema = mongoose.Schema({
-  project: {
-    type: mongoose.Schema.ObjectId,
-    ref: 'Project',
-    required: [true, 'Please add project id']
-  },
-
-  version: {
-    type: mongoose.Schema.ObjectId,
-    ref: 'Version',
-    required: [true, 'Please define the version']
-  },
-  guid: {
-    type: String,
-    required: [true, 'Please add project guid']
-  },
-  topics: [
-    {
->>>>>>> 6eac544275278ef422042472b3cc0f0898be6795
       topic: {
         type: mongoose.Schema.ObjectId,
         ref: 'Topic'
       }
-<<<<<<< HEAD
     }],
     history: [{
-=======
-    }
-  ],
-  history: [
-    {
->>>>>>> 6eac544275278ef422042472b3cc0f0898be6795
       modifiedAt: {
         type: Date,
         default: Date.now
@@ -76,44 +47,30 @@ const RevitElementSchema = mongoose.Schema({
       sharedParameterChange: {
         type: Boolean,
         default: false
-<<<<<<< HEAD
       },
-=======
-      }
-    }
-  ],
-  name: String,
->>>>>>> 6eac544275278ef422042472b3cc0f0898be6795
+    }],
+    elementId: String,
 
-  elementId: String,
+    category: String,
 
-  category: String,
+    level: String,
 
-  level: String,
-
-  parameters: String,
-
-<<<<<<< HEAD
     parameters: String,
 
     geometryParameters: String,
-=======
-  geometryParameters: String,
->>>>>>> 6eac544275278ef422042472b3cc0f0898be6795
 
-  sharedParameters: String,
+    sharedParameters: String,
 
-  worksetId: String,
+    worksetId: String,
 
-  location: String,
+    location: String,
 
-  boundingBox: String,
+    boundingBox: String,
 
-  centroid: String,
+    centroid: String,
 
-  typeId: String,
+    typeId: String,
 
-<<<<<<< HEAD
     volume: String,
     createdAt: {
       type: Date,
@@ -122,22 +79,10 @@ const RevitElementSchema = mongoose.Schema({
     updatedAt: {
       type: Date,
       default: Date.now
-    },
+    }
   }
 
 );
-=======
-  volume: String,
-  createdAt: {
-    type: Date,
-    default: Date.now()
-  },
-  updatedAt: {
-    type: Date,
-    default: Date.now()
-  }
-});
->>>>>>> 6eac544275278ef422042472b3cc0f0898be6795
 
 RevitElementSchema.pre('save', async function (next) {
   const common = await this.model("Common").findOne({
@@ -152,7 +97,7 @@ RevitElementSchema.pre('save', async function (next) {
       project: this.project,
       category: [this.category]
     })
-  } 
+  }
   next();
 })
 
