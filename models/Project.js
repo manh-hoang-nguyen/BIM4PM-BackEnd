@@ -1,23 +1,19 @@
 const mongoose = require('mongoose');
 
-const ProjectSchema = mongoose.Schema({
-  name: {
-    type: String,
-    required: [true, "please add a name"],
-    maxlength: [50, "Name can not more than 50 charecters"]
-  },
-  description: {
-    type: String,
-    required: [true, "please add a description"],
-    maxlength: [500, "Description can not more than 500 charecters"]
-  },
-  owner: {
-    type: mongoose.Schema.ObjectId,
-    ref: "User",
-    required: true
-  },
-  members: [{
-    user: {
+const ProjectSchema = mongoose.Schema(
+  {
+    name: {
+      type: String,
+      required: [true, 'please add a name'],
+      unique: true,
+      maxlength: [50, 'Name can not more than 50 charecters']
+    },
+    description: {
+      type: String,
+      required: [true, 'please add a description'],
+      maxlength: [500, 'Description can not more than 500 charecters']
+    },
+    owner: {
       type: mongoose.Schema.ObjectId,
       ref: 'User',
       required: true
@@ -36,16 +32,18 @@ const ProjectSchema = mongoose.Schema({
         }
       }
     ]
-  }]},{
-  toObject: {
-    virtuals: true
-  }}
+  },
+  {
+    timestamps: true,
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true }
+  }
 );
 
 //Cascade delete Modification, Element, Comment when Project is deleted
 ProjectSchema.pre('remove', async function(next) {
   console.log(
-    ` , Elements, Comments, Versions being removed from projects ${this._id}`
+    `Elements, Comments, Versions being removed from projects ${this._id}`
   );
 
   await this.model('Version').deleteMany({ project: this._id });
