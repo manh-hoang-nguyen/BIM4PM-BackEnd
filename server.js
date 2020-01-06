@@ -29,7 +29,7 @@ const authRouter = require('./routes/auth');
 const projectRouter = require('./routes/projects');
 const versionRouter = require('./routes/versions');
 const userRouter = require('./routes/users');
-const modificationRouter = require('./routes/modifications');
+ 
 const elementRouter = require('./routes/revitElements');
 const commentRouter = require('./routes/comments');
 const topicRouter = require('./routes/topics');
@@ -72,7 +72,7 @@ app.use('/api/v1/auth',authRouter);
 app.use('/api/v1/projects', projectRouter);
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/versions', versionRouter);
-app.use('/api/v1/modifications', modificationRouter);
+ 
 app.use('/api/v1/', elementRouter);
 app.use('/api/v1/comments', commentRouter);
 

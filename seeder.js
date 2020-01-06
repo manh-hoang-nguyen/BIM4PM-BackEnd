@@ -25,7 +25,7 @@ mongoose.connect(process.env.MONGO_URI_LOCAL,{
 //Read JSON files
 const projects=JSON.parse(fs.readFileSync(`${__dirname}/_data/projects.json`,'utf-8'));
 const users=JSON.parse(fs.readFileSync(`${__dirname}/_data/users.json`,'utf-8'));
-const modifications=JSON.parse(fs.readFileSync(`${__dirname}/_data/modifications.json`,'utf-8'));
+ 
 const versions=JSON.parse(fs.readFileSync(`${__dirname}/_data/versions.json`,'utf-8'));
 const revitElements=JSON.parse(fs.readFileSync(`${__dirname}/_data/revitElements.json`,'utf-8'));
 const comments=JSON.parse(fs.readFileSync(`${__dirname}/_data/comments.json`,'utf-8'));

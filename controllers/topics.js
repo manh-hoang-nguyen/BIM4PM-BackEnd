@@ -2,17 +2,13 @@ const mongoose = require('mongoose');
 const asyncHandler = require('../middleware/asyncHandler');
 const Topic = require('../models/Topic');
 const ErrorResponse = require('../utils/errorReponse');
-const Project = require("../models/Project");
-
+const Project = require('../models/Project');
 
 //@desc     Create topic
 //@route    POST /api/v1/projects/:projectId/topics
 //@access   Private
 exports.createTopic = asyncHandler(async (req, res, next) => {
-
-  const {
-    projectId
-  } = req.params;
+  const { projectId } = req.params;
 
   const project = await Project.findById(projectId);
 
@@ -31,37 +27,27 @@ exports.createTopic = asyncHandler(async (req, res, next) => {
     success: true,
     data: topic
   });
-
 });
-
 
 //@desc     Get topics of project
 //@route    GET /api/v1/projects/:projectId/topics
 //@access   Private
 exports.getTopics = asyncHandler(async (req, res, next) => {
+  const { projectId } = req.params;
 
-  const {
-    projectId
-  } = req.params;
- 
-  const topic = await Topic.find({project: projectId});
+  const topic = await Topic.find({ project: projectId });
 
   res.status(201).json({
     success: true,
     data: topic
   });
-
 });
-
 
 //@desc     Add comment to topic
 //@route    POST /api/v1/projects/:projectId/topics/:topicId
 //@access   Private
 exports.addComment = asyncHandler(async (req, res, next) => {
-  const {
-    projectId,
-    topicId
-  } = req.params;
+  const { projectId, topicId } = req.params;
 
   req.body.user = req.user.id;
 
@@ -77,14 +63,14 @@ exports.addComment = asyncHandler(async (req, res, next) => {
     $push: {
       comments: req.body
     }
-  }
-  topic= await Topic.findByIdAndUpdate(topicId, option, {
+  };
+  topic = await Topic.findByIdAndUpdate(topicId, option, {
     new: true,
-    runValidators:true
+    runValidators: true
   });
 
   res.status(200).json({
     success: true,
     data: topic
   });
-})
+});

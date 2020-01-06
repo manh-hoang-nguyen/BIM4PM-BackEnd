@@ -1,52 +1,47 @@
 const mongoose = require('mongoose');
- 
 
-const VersionSchema = mongoose.Schema({
-    project:{
-        type:mongoose.Schema.ObjectId,
-        ref:'Project',
-        required:[true, 'Please add project id'],
-        unique: true
+const VersionSchema = mongoose.Schema(
+  {
+    project: {
+      type: mongoose.Schema.ObjectId,
+      ref: 'Project',
+      required: [true, 'Please add project id']
     },
-    versions:[{
-        version:{
-            type:Number,
-            required:[true, 'Please define the version'],
-            unique: [true, 'Please add another version']
-        }, 
-        description:{
-            type:String,
-            required:[true, 'Please add a description']
+    versions: [
+      {
+        version: {
+          type: Number,
+        //   required: [true, 'Please define the version']
         },
-        createdBy:{
-            type:mongoose.Schema.ObjectId,
-            ref:'User',
-            required:true
+        description: {
+          type: String,
+          default: 'No description'
         },
-        createdAt:{
-            type:Date,
-            default:Date.now
+        createdBy: {
+          type: mongoose.Schema.ObjectId,
+          ref: 'User',
+        //   required: true
+        },
+        createdAt: {
+          type: Date,
+          default: Date.now
         }
+      }
+    ]
+  },
+  { timestamps: true }
+);
 
-    }]
-   
-},{timestamps:true})
-
-VersionSchema.statics.findByVersion = function(projectId, version, callback){
-     
-     this.findOne({project: projectId}, function(err, items){
-         
-        items.versions.forEach(item=>{
-       
-           if (item.version==version) { 
-               
-               return (item, callback);
-            }    
-       })
-    })
-   
-     
-}
-
-VersionSchema.index({project:1}); //indexing  
-module.exports =mongoose.model('Version',VersionSchema);
+VersionSchema.statics.findByVersion = function(projectId, version, callback) {
+  this.findOne({ project: projectId }, function(err, items) {
+    items.versions.forEach(item => {
+      if (item.version == version) {
+        return item, callback;
+      }
+    });
+  });
+};
+ 
+const Model = mongoose.model('Version', VersionSchema);
+Model.syncIndexes(); // Handling errour duplicate key 
+module.exports = Model;
