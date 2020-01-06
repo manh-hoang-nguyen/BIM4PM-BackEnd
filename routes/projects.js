@@ -19,7 +19,7 @@ const {protect} = require('../middleware/auth')
 
 //Include other resource routers
 const versionRouter = require('./versions');
-const modificationRouter = require('./modifications');
+ 
 const elementRouter = require('./revitElements');
 const commentRouter = require('./comments');
 const topicRouter = require('./topics');
@@ -28,11 +28,12 @@ const router = express.Router();
 
 //Re-route into other resource routers
 router.use('/:projectId/versions', versionRouter);
-router.use('/:projectId/modifications', modificationRouter);
+ 
 router.use('/:projectId/elements/guid/:guid', elementRouter);
 router.use('/:projectId/elements', elementRouter);
 router.use('/:projectId/topics', topicRouter);
 router.use('/:projectId/comments(/:id)?/guid/:guid', commentRouter);
+router.use('/:projectId/comments', commentRouter);
 
 
 router

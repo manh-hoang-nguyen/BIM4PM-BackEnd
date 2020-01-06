@@ -1,94 +1,92 @@
 const mongoose = require('mongoose');
 
-const Point = require('./children/Point');
+const RevitElementSchema = mongoose.Schema({
+  project: {
+    type: mongoose.Schema.ObjectId,
+    ref: 'Project',
+    required: [true, 'Please add project id']
+  },
 
-const RevitElementSchema = mongoose.Schema(
-  {
-    project: {
-      type: mongoose.Schema.ObjectId,
-      ref: 'Project',
-      required: [true, 'Please add project id']
-    },
-
-    version: {
-      type: mongoose.Schema.ObjectId,
-      ref: 'Version',
-      required: [true, 'Please define the version']
-    }, 
-    guid: {
-      type: String,
-      required: [true, 'Please add project guid']
-    },
-    topics:[{
-      topic:{
+  version: {
+    type: mongoose.Schema.ObjectId,
+    ref: 'Version',
+    required: [true, 'Please define the version']
+  },
+  guid: {
+    type: String,
+    required: [true, 'Please add project guid']
+  },
+  topics: [
+    {
+      topic: {
         type: mongoose.Schema.ObjectId,
-        ref:'Topic'
+        ref: 'Topic'
       }
-    }],
-    history:[{
+    }
+  ],
+  history: [
+    {
       modifiedAt: {
         type: Date,
         default: Date.now
       },
-      user:{
+      user: {
         type: mongoose.Schema.ObjectId,
-        ref:'User',
+        ref: 'User',
         required: true
       },
-      isFirstCommit:{
+      isFirstCommit: {
         type: Boolean,
-        default:false
+        default: false
       },
-      geometryChange:{
+      geometryChange: {
         type: Boolean,
-        default:false
+        default: false
       },
-      parameterChange:{
+      parameterChange: {
         type: Boolean,
-        default:false
+        default: false
       },
-      sharedParameterChange:{
+      sharedParameterChange: {
         type: Boolean,
-        default:false
-      },
+        default: false
+      }
+    }
+  ],
+  name: String,
 
-    }],
-    name: String,
+  elementId: String,
 
-    elementId: String,
+  category: String,
 
-    category: String,
+  level: String,
 
-    level: String,
+  parameters: String,
 
-    parameters: String,
-    
-    geometryParameters: String,
+  geometryParameters: String,
 
-    sharedParameters: String,
+  sharedParameters: String,
 
-    worksetId: String,
+  worksetId: String,
 
-    location: String,
+  location: String,
 
-    boundingBox: String,
+  boundingBox: String,
 
-    centroid: String,
+  centroid: String,
 
-    typeId: String,
+  typeId: String,
 
-    volume: String,
-    createdAt: {
-      type: Date,
-      default: Date.now()
-    },
-    updatedAt: {
-      type: Date,
-      default: Date.now()
-    },
-  } 
-   
-);
+  volume: String,
+  createdAt: {
+    type: Date,
+    default: Date.now()
+  },
+  updatedAt: {
+    type: Date,
+    default: Date.now()
+  }
+});
 
 RevitElementSchema.index({ project: 1, guid: 1, version: 1 }, { unique: true }); //indexing
 module.exports = mongoose.model('RevitElement', RevitElementSchema);

@@ -1,10 +1,10 @@
-const async = require("async");
-const ErrorResponse = require("../utils/errorReponse");
-const asyncHandler = require("../middleware/asyncHandler");
-const RevitElement = require("../models/RevitElement");
-const Project = require("../models/Project");
-const Version = require("../models/Version");
-const CheckUserRole = require("../utils/checkUserRole");
+const async = require('async');
+const ErrorResponse = require('../utils/errorReponse');
+const asyncHandler = require('../middleware/asyncHandler');
+const RevitElement = require('../models/RevitElement');
+const Project = require('../models/Project');
+const Version = require('../models/Version');
+const CheckUserRole = require('../utils/checkUserRole');
 
 //@desc     Get elements of project of current version
 //@route    GET /api/v1/projects/:projectId/elements  ==> get all elements
@@ -26,9 +26,9 @@ exports.getElementsOfVersion = asyncHandler(async (req, res, next) => {
         }
       });
 
-      if (typeof v == "undefined") next(new ErrorResponse(`Version not found`));
+      if (typeof v == 'undefined') next(new ErrorResponse(`Version not found`));
 
-      if (typeof guid !== "undefined") {
+      if (typeof guid !== 'undefined') {
         elements = await RevitElement.find({
           project: projectId,
           guid: guid,
@@ -38,7 +38,7 @@ exports.getElementsOfVersion = asyncHandler(async (req, res, next) => {
         elements = await RevitElement.find({
           project: projectId,
           version: v._id
-        }).populate({ path: "history.user", select: "name" });
+        }).populate({ path: 'history.user', select: 'name' });
       }
 
       res.status(200).json({
@@ -48,7 +48,7 @@ exports.getElementsOfVersion = asyncHandler(async (req, res, next) => {
       });
     });
   } else {
-    if (typeof guid !== "undefined") {
+    if (typeof guid !== 'undefined') {
       elements = await RevitElement.find({
         project: projectId,
         guid: guid,
@@ -104,17 +104,24 @@ exports.getHistory = asyncHandler(async (req, res, next) => {
   const { projectId, guid } = req.params;
 
   let version = req.currentVersion._id;
-  
+
   const history = await RevitElement.findOne({
     project: projectId,
     version,
     guid
-  }).select("history").populate({path:'history.user', select:'name'});
+  })
+    .select('history')
+    .populate({ path: 'history.user', select: 'name' });
 
-  if(!history){
-    return next(new ErrorResponse(`History not found with guid of ${req.params.guid}`,404));
+  if (!history) {
+    return next(
+      new ErrorResponse(
+        `History not found with guid of ${req.params.guid}`,
+        404
+      )
+    );
   }
-  
+
   res.status(200).json({
     success: true,
     data: history
@@ -186,7 +193,7 @@ exports.deleteElements = asyncHandler(async (req, res, next) => {
       });
     },
     function done(err, datas) {
-      res.json(err ? { message: err } : "Delete successfully");
+      res.json(err ? { message: err } : 'Delete successfully');
     }
   );
 });
@@ -247,12 +254,12 @@ exports.updateElements = asyncHandler(async (req, res, next) => {
       );
     },
     function done(err, datas) {
-      res.json(err ? { message: err } : "Update successfully");
+      res.json(err ? { message: err } : 'Update successfully');
     }
   );
 });
 
 exports.deleteAllForTest = asyncHandler(async (req, res, next) => {
   await RevitElement.deleteMany({ project: req.params.projectId });
-  res.json("success");
+  res.json('success');
 });
