@@ -53,7 +53,9 @@ const TopicSchema = mongoose.Schema({
 },{
   timestamps: true
 });
+
 TopicSchema.index({
   project: 1
 }); //indexing
+
 module.exports = mongoose.model('Topic', TopicSchema);
