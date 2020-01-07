@@ -7,46 +7,56 @@ const async = require('async');
 //@access   Public
 
 exports.getCatAndParameter = asyncHandler(async (req, res, next) => {
-  const { projectId } = req.params;
+  const {
+    projectId
+  } = req.params;
 
   const categories = await Common.findOne({
     project: projectId
   }).select('category');
-  let resArr = [];
 
-  // https://stackoverflow.com/questions/18983138/callback-after-all-asynchronous-foreach-callbacks-are-completed
-  const loop = categories.category.forEach(category => {
+  async.mapSeries(categories.category, function (category, callback) {
+    console.log(category)
     let parameters;
-    let revitParameters;
-    let geometryParameters;
-    let sharedParameters;
-    RevitElement.findOne({ category })
-      .select('parameters geometryParameters sharedParameters')
-      .then(param => {
-        revitParameters = deserilizeParam(param.parameters);
-        geometryParameters = deserilizeParam(param.geometryParameters);
-        sharedParameters = deserilizeParam(param.sharedParameters);
-        revitParameters.concat(geometryParameters, sharedParameters);
-        parameters = [...new Set(revitParameters)];
 
-        resArr.push({ category, parameters });
+    RevitElement.findOne({
+      project: projectId,
+      category
+    }, 'parameters geometryParameters sharedParameters', function (err, param) {
+
+
+      parameters = [...new Set(deserilizeParam(param.parameters).concat(deserilizeParam(param.geometryParameters), deserilizeParam(param.sharedParameters)))];
+
+
+      if (err) return callback(err);
+
+      callback(null, {
+        category,
+        parameters
       });
-  });
-  Promise.all(loop).then(() => {
+    })
+
+
+
+  }, function (err, results) {
     res.status(200).json({
       success: true,
-      data: resArr
+      data: results
     });
+
+
   });
+
+
 });
 
 // return an array of parameter name
-function deserilizeParam(paramNameValue) {
+function deserilizeParam(paramNameValue, isShared) {
   let parameters;
   let array = paramNameValue.split(';');
 
   array.pop();
   let para = array.map(item => item.split(':')[1]);
-  parameters = para.map(p => p.split('=')[0]);
+  parameters = para.map(p => {name:p.split('=')[0], isShared});
   return parameters;
 }

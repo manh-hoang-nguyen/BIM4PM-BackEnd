@@ -6,6 +6,6 @@ const { getCatAndParameter } = require('../controllers/common');
 
 router
     .route('/')
-    .get(protect, getCatAndParameter);
+    .get( getCatAndParameter);
 
     module.exports = router;
