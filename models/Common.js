@@ -4,7 +4,8 @@ const CommonSchema = mongoose.Schema({
     project: {
         type: mongoose.Schema.ObjectId,
         ref: 'Project',
-        required: [true, 'Please add project id']
+        required: [true, 'Please add project id'],
+        unique: true
     },
     category: Array
 });

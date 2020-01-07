@@ -1,9 +1,10 @@
 const async = require('async');
 const ErrorResponse = require('../utils/errorReponse');
 const asyncHandler = require('../middleware/asyncHandler');
-const Schedule = requir('./../models/Schedule.js');
+const Schedule = require('./../models/Schedule.js');
+const RevitElement = require('../models/RevitElement');
 
-//@desc     Create schedule of project
+//@desc     Create Revit schedule
 //@route    POST /api/v1/projects/:projectId/schedules
 //@access   Private
 exports.createSchedule = asyncHandler(async (req, res, next) => {
@@ -18,3 +19,4 @@ exports.createSchedule = asyncHandler(async (req, res, next) => {
     data: schedule
   });
 });
+

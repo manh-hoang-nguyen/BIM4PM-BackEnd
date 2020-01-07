@@ -1,4 +1,5 @@
 const express = require('express');
+const router = express.Router();
 
 const advancedResults= require('../middleware/advancedResults');
 
@@ -23,8 +24,7 @@ const versionRouter = require('./versions');
 const elementRouter = require('./revitElements');
 const commentRouter = require('./comments');
 const topicRouter = require('./topics');
-
-const router = express.Router();
+const commonRouter = require('./common');
 
 //Re-route into other resource routers
 router.use('/:projectId/versions', versionRouter);
@@ -34,6 +34,7 @@ router.use('/:projectId/elements', elementRouter);
 router.use('/:projectId/topics', topicRouter);
 router.use('/:projectId/comments(/:id)?/guid/:guid', commentRouter);
 router.use('/:projectId/comments', commentRouter);
+router.use('/:projectId/category', commonRouter);
 
 
 router

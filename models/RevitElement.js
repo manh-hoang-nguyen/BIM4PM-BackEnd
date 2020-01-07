@@ -1,28 +1,31 @@
 const mongoose = require('mongoose');
 
 const RevitElementSchema = mongoose.Schema({
-    project: {
-      type: mongoose.Schema.ObjectId,
-      ref: 'Project',
-      required: [true, 'Please add project id']
-    },
+  project: {
+    type: mongoose.Schema.ObjectId,
+    ref: 'Project',
+    required: [true, 'Please add project id']
+  },
 
-    version: {
-      type: mongoose.Schema.ObjectId,
-      ref: 'Version',
-      required: [true, 'Please define the version']
-    },
-    guid: {
-      type: String,
-      required: [true, 'Please add project guid']
-    },
-    topics: [{
+  version: {
+    type: mongoose.Schema.ObjectId,
+    ref: 'Version',
+    required: [true, 'Please define the version']
+  },
+  guid: {
+    type: String,
+    required: [true, 'Please add project guid']
+  },
+  topics: [
+    {
       topic: {
         type: mongoose.Schema.ObjectId,
         ref: 'Topic'
       }
-    }],
-    history: [{
+    }
+  ],
+  history: [
+    {
       modifiedAt: {
         type: Date,
         default: Date.now
@@ -47,47 +50,47 @@ const RevitElementSchema = mongoose.Schema({
       sharedParameterChange: {
         type: Boolean,
         default: false
-      },
-    }],
-    elementId: String,
-
-    category: String,
-
-    level: String,
-
-    parameters: String,
-
-    geometryParameters: String,
-
-    sharedParameters: String,
-
-    worksetId: String,
-
-    location: String,
-
-    boundingBox: String,
-
-    centroid: String,
-
-    typeId: String,
-
-    volume: String,
-    createdAt: {
-      type: Date,
-      default: Date.now
-    },
-    updatedAt: {
-      type: Date,
-      default: Date.now
+      }
     }
+  ],
+  elementId: String,
+
+  category: String,
+
+  level: String,
+
+  parameters: String,
+
+  geometryParameters: String,
+
+  sharedParameters: String,
+
+  worksetId: String,
+
+  location: String,
+
+  boundingBox: String,
+
+  centroid: String,
+
+  typeId: String,
+
+  volume: String,
+  createdAt: {
+    type: Date,
+    default: Date.now
+  },
+  updatedAt: {
+    type: Date,
+    default: Date.now
   }
+});
 
-);
-
-RevitElementSchema.pre('save', async function (next) {
-  const common = await this.model("Common").findOne({
+RevitElementSchema.pre('save', async function(next) {
+  const common = await this.model('Common').findOne({
     project: this.project
   });
+
   if (common) {
     if (!common.category.includes(this.category))
       common.category.push(this.category);
@@ -96,16 +99,19 @@ RevitElementSchema.pre('save', async function (next) {
     await this.model('Common').create({
       project: this.project,
       category: [this.category]
-    })
+    });
   }
   next();
-})
+});
 
-RevitElementSchema.index({
-  project: 1,
-  guid: 1,
-  version: 1
-}, {
-  unique: true
-}); //indexing
+RevitElementSchema.index(
+  {
+    project: 1,
+    guid: 1,
+    version: 1
+  },
+  {
+    unique: true
+  }
+); //indexing
 module.exports = mongoose.model('RevitElement', RevitElementSchema);
