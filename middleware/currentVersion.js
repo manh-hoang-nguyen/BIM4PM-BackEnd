@@ -8,7 +8,7 @@ exports.currentVersion = asyncHandler(async (req,res, next)=>{
 
     const currentVersion = versions.versions[versions.versions.length-1];
  
-    if(typeof currentVersion == 'undefined') return next(new ErrorReponse(`No version of project is not created yet`))
+    if(typeof currentVersion == 'undefined') return next(new ErrorReponse(`No version of project is not created yet`, 400))
     req.currentVersion = currentVersion;
 
     next();

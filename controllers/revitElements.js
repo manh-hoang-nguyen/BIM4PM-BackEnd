@@ -14,14 +14,14 @@ exports.getElementsOfVersion = asyncHandler(async (req, res, next) => {
   const { projectId, guid } = req.params;
 
   let elements;
-  const version = req.query.version;
+  const numVersion = req.query.version;
 
-  if (version) {
+  if (numVersion) {
     let v;
 
     Version.findOne({ project: projectId }, async function(err, items) {
       items.versions.forEach(item => {
-        if (item.version == version) {
+        if (item.version == numVersion) {
           v = item;
         }
       });

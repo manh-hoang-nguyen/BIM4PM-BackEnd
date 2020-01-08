@@ -29,10 +29,13 @@ const authRouter = require('./routes/auth');
 const projectRouter = require('./routes/projects');
 const versionRouter = require('./routes/versions');
 const userRouter = require('./routes/users');
- 
 const elementRouter = require('./routes/revitElements');
 const commentRouter = require('./routes/comments');
 const topicRouter = require('./routes/topics');
+
+//FRONT route
+const project = require('./routes/FrontRoute/projects');
+
 //Body parser 
 app.use(express.json({limit: '50mb'}));
 //app.use(express.urlencoded({limit: '50mb'}));
@@ -71,10 +74,12 @@ app.use(cors());
 app.use('/api/v1/auth',authRouter);
 app.use('/api/v1/projects', projectRouter);
 app.use('/api/v1/users', userRouter);
-app.use('/api/v1/versions', versionRouter);
- 
+app.use('/api/v1/versions', versionRouter); 
 app.use('/api/v1/', elementRouter);
 app.use('/api/v1/comments', commentRouter);
+
+//FRONT Mount routers
+app.use('/project', project);
 
 app.use(errorHandler);
 
