@@ -1,7 +1,7 @@
 const async = require('async');
 const ErrorResponse = require('../utils/errorReponse');
 const asyncHandler = require('../middleware/asyncHandler');
-const Schedule = require('./../models/Schedule.js');
+const RevitSchedule = require('./../models/RevitSchedule.js');
 const RevitElement = require('../models/RevitElement');
 
 //@desc     Create Revit schedule
@@ -12,7 +12,7 @@ exports.createSchedule = asyncHandler(async (req, res, next) => {
 
   req.body.user = req.user._id;
 
-  const schedule = await Schedule.create(req.body);
+  const schedule = await RevitSchedule.create(req.body);
 
   res.status(201).json({
     success: true,
