@@ -39,7 +39,7 @@ const CommentSchema = mongoose.Schema({
   ]
 });
 
-CommentSchema.index({ project: 1}); //define index
-const Model =  mongoose.model('Comment', CommentSchema);
+CommentSchema.index({ project: 1 }); //define index
+const Model = mongoose.model('Comment', CommentSchema);
 Model.syncIndexes();
 module.exports = Model;

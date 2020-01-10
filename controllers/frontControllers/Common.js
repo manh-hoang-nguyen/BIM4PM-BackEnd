@@ -1,6 +1,6 @@
-const Common = require('../models/Common');
-const RevitElement = require('../models/RevitElement');
-const asyncHandler = require('../middleware/asyncHandler');
+const Common = require('../../models/Common');
+const RevitElement = require('../../models/RevitElement');
+const asyncHandler = require('../../middleware/asyncHandler');
 const async = require('async');
 
 //@desc     Get categories

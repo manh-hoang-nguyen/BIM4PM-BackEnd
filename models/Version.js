@@ -10,8 +10,8 @@ const VersionSchema = mongoose.Schema(
     versions: [
       {
         version: {
-          type: Number,
-        //   required: [true, 'Please define the version']
+          type: Number
+          //   required: [true, 'Please define the version']
         },
         description: {
           type: String,
@@ -19,8 +19,8 @@ const VersionSchema = mongoose.Schema(
         },
         createdBy: {
           type: mongoose.Schema.ObjectId,
-          ref: 'User',
-        //   required: true
+          ref: 'User'
+          //   required: true
         },
         createdAt: {
           type: Date,
@@ -41,7 +41,7 @@ VersionSchema.statics.findByVersion = function(projectId, version, callback) {
     });
   });
 };
- 
+
 const Model = mongoose.model('Version', VersionSchema);
-Model.syncIndexes(); // Handling errour duplicate key 
+Model.syncIndexes(); // Handling error duplicate key
 module.exports = Model;

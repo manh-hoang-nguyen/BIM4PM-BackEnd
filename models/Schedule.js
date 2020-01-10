@@ -1,15 +1,19 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
 const ScheduleSchema = mongoose.Schema({
   project: {
     type: mongoose.Schema.ObjectId,
-    ref: "Project",
-    required: [true, "Please add project id"]
+    ref: 'Project',
+    required: [true, 'Please add project id']
   },
   user: {
     type: mongoose.Schema.ObjectId,
-    ref: "User",
-    required: [true, "Please add user id"]
+    ref: 'User',
+    required: [true, 'Please add user id']
+  },
+  name: {
+    type: String,
+    required: true
   },
   sharedWith: [mongoose.Schema.ObjectId],
   column: [String],
@@ -17,4 +21,4 @@ const ScheduleSchema = mongoose.Schema({
 });
 
 ScheduleSchema.index({ project: 1 });
-module.exports = mongoose.model("Schedule", ScheduleSchema);
+module.exports = mongoose.model('Schedule', ScheduleSchema);

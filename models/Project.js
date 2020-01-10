@@ -5,7 +5,6 @@ const ProjectSchema = mongoose.Schema(
     name: {
       type: String,
       required: [true, 'please add a name'],
-      unique: true,
       maxlength: [50, 'Name can not more than 50 charecters']
     },
     description: {
@@ -91,5 +90,6 @@ ProjectSchema.virtual('versions', {
   foreignField: 'project',
   justOne: false
 });
-
-module.exports = mongoose.model('Project', ProjectSchema);
+const Model = mongoose.model('Project', ProjectSchema);
+Model.syncIndexes(); // Handling error duplicate key 
+module.exports = Model;
