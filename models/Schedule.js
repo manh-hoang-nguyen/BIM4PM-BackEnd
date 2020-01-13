@@ -13,12 +13,16 @@ const ScheduleSchema = mongoose.Schema({
   },
   name: {
     type: String,
-    required: true
+    required: true,
+    default: 'Schedules' + Math.random()
   },
   sharedWith: [mongoose.Schema.ObjectId],
-  column: [String],
+  categories: [String],
+  parameters: [String],
   sort: [String]
 });
 
 ScheduleSchema.index({ project: 1 });
-module.exports = mongoose.model('Schedule', ScheduleSchema);
+const Model = mongoose.model('Schedule', ScheduleSchema);
+Model.syncIndexes(); // Handling error duplicate key
+module.exports = Model;
