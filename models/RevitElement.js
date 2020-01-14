@@ -53,6 +53,8 @@ const RevitElementSchema = mongoose.Schema({
       }
     }
   ],
+  name: String,
+
   elementId: String,
 
   category: String,
@@ -76,6 +78,7 @@ const RevitElementSchema = mongoose.Schema({
   typeId: String,
 
   volume: String,
+  
   createdAt: {
     type: Date,
     default: Date.now

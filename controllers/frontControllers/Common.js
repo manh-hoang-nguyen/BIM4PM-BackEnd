@@ -4,17 +4,24 @@ const asyncHandler = require('../../middleware/asyncHandler');
 const async = require('async');
 
 //@desc     Get categories
-//@route    GET /api/v1/projects/:projectId/category
+//@route    GET /project/:projectId/parametersofcategory
 //@access   Public
 exports.getCatAndParameter = asyncHandler(async (req, res, next) => {
   const { projectId } = req.params;
+  const { category } = req.query;
 
   const categories = await Common.findOne({
     project: projectId
   }).select('category');
 
+  let categoryList;
+  if (category) {
+    categoryList = category.split(',');
+  } else {
+    categoryList = categories.category;
+  }
   async.mapSeries(
-    categories.category,
+    categoryList,
     function(category, callback) {
       let parameters;
 
