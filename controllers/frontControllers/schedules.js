@@ -1,5 +1,9 @@
-const Schedule = require('../../models/Schedule');
-const asyncHandler = require('../../middleware/asyncHandler');
+const Schedule = require("../../models/Schedule");
+const asyncHandler = require("../../middleware/asyncHandler");
+
+//@desc     Create schedule
+//@route    POST /project/:projectId/schedules
+//@access   Private
 
 exports.createSchedule = asyncHandler(async (req, res, next) => {
   const { projectId } = req.params;
@@ -28,6 +32,31 @@ exports.getSchedule = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
 
   const schedule = await Schedule.findById(id);
+  res.status(200).json({
+    success: true,
+    data: schedule
+  });
+});
+
+//@desc     Update schedule
+//@route    PUT /project/:projectId/schedules/:scheduleId
+//@access   Private
+exports.updateSchedule = asyncHandler(async (req, res, next) => {
+  const { projectId, scheduleId } = req.params;
+
+  const option = {
+    $set: {
+      categories: req.body.categories.split(","),
+      parameters: req.body.parameters.split(",")
+    }
+  };
+
+  const schedule = await Schedule.findOneAndUpdate(
+    { _id: scheduleId, project: projectId },
+    option,
+    { upsert }
+  );
+
   res.status(200).json({
     success: true,
     data: schedule
