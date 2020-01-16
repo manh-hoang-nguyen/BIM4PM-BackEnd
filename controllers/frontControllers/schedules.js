@@ -5,8 +5,8 @@ exports.createSchedule = asyncHandler(async (req, res, next) => {
   const { projectId } = req.params;
   req.body.project = projectId;
   req.body.user = req.user._id;
-  req.body.categories = req.body.categories.split(',');
-  req.body.parameters = req.body.parameters.split(',');
+  // req.body.categories = req.body.categories.split(',');
+  // req.body.parameters = req.body.parameters.split(',');
   const schedule = await Schedule.create(req.body);
   res.status(200).json({
     success: true,
