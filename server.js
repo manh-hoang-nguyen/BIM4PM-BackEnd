@@ -4,6 +4,10 @@ const dotenv = require('dotenv');
 const colors = require('colors');
 const morgan=require('morgan');
 const cookieParser = require('cookie-parser')
+const graphqlHttp = require('express-graphql');
+
+const grapqlSchema = require('./graphql/schema')
+const grapqlResolver = require('./graphql/resolvers')
 
 const connectDB = require('./config/db');
 const errorHandler =require('./middleware/errHandler');
@@ -85,7 +89,11 @@ app.use(errorHandler);
 
 
 
-
+app.use('/graphql', graphqlHttp({
+    schema: grapqlSchema,
+    rootValue: grapqlResolver,
+    graphiql: true,
+}))
 
 const PORT = process.env.PORT||5000;
 
