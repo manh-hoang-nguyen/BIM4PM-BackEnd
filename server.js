@@ -93,7 +93,7 @@ app.use('/graphql', graphqlHttp({
     schema: grapqlSchema,
     rootValue: grapqlResolver,
     graphiql: true,
-}))
+}));
 
 const PORT = process.env.PORT||5000;
 
