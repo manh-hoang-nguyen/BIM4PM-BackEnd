@@ -1,27 +1,27 @@
-const express = require('express');
-const path = require('path');
-const dotenv = require('dotenv');
-const colors = require('colors');
-const morgan=require('morgan');
-const cookieParser = require('cookie-parser')
-const graphqlHttp = require('express-graphql');
+const express = require("express");
+const path = require("path");
+const dotenv = require("dotenv");
+const colors = require("colors");
+const morgan = require("morgan");
+const cookieParser = require("cookie-parser");
+const graphqlHttp = require("express-graphql");
 
-const grapqlSchema = require('./graphql/schema')
-const grapqlResolver = require('./graphql/resolvers')
+const grapqlSchema = require("./graphql/schema");
+const grapqlResolver = require("./graphql/resolvers");
 
-const connectDB = require('./config/db');
-const errorHandler =require('./middleware/errHandler');
+const connectDB = require("./config/db");
+const errorHandler = require("./middleware/errHandler");
 
 //Security
-const mongoSanitize = require('express-mongo-sanitize');
-const helmet = require('helmet');
-const xss = require('xss-clean');
-const rateLimit = require('express-rate-limit');
-const hpp = require('hpp');
-const cors = require('cors');
+const mongoSanitize = require("express-mongo-sanitize");
+const helmet = require("helmet");
+const xss = require("xss-clean");
+const rateLimit = require("express-rate-limit");
+const hpp = require("hpp");
+const cors = require("cors");
 
 //Load env variable
-dotenv.config({path: './config/config.env'});
+dotenv.config({ path: "./config/config.env" });
 
 //Connect to Database
 connectDB();
@@ -29,27 +29,27 @@ connectDB();
 const app = express();
 
 //route files
-const authRouter = require('./routes/auth');
-const projectRouter = require('./routes/projects');
-const versionRouter = require('./routes/versions');
-const userRouter = require('./routes/users');
-const elementRouter = require('./routes/revitElements');
-const commentRouter = require('./routes/comments');
-const topicRouter = require('./routes/topics');
+const authRouter = require("./routes/auth");
+const projectRouter = require("./routes/projects");
+const versionRouter = require("./routes/versions");
+const userRouter = require("./routes/users");
+const elementRouter = require("./routes/revitElements");
+const commentRouter = require("./routes/comments");
+const topicRouter = require("./routes/topics");
 
 //FRONT route
-const project = require('./routes/FrontRoute/projects');
+const project = require("./routes/FrontRoute/projects");
 
-//Body parser 
-app.use(express.json({limit: '50mb'}));
+//Body parser
+app.use(express.json({ limit: "50mb" }));
 //app.use(express.urlencoded({limit: '50mb'}));
 
 //Cookie parser
 app.use(cookieParser());
 
 //Dev logging middleware--chi chay o moi truong dev
-if(process.env.NODE_ENV==='developement'){
-    app.use(morgan('dev'));
+if (process.env.NODE_ENV === "developement") {
+  app.use(morgan("dev"));
 }
 
 //Sanitize data
@@ -63,9 +63,9 @@ app.use(xss());
 
 //Rate limit
 const limiter = rateLimit({
-    windowMs:10*60*1000, //10 min ms dc thuc hien request tiep theo
-    max:100 //limit to 100
-})
+  windowMs: 10 * 60 * 1000, //10 min ms dc thuc hien request tiep theo
+  max: 100 //limit to 100
+});
 app.use(limiter);
 
 //Prevent http param pollution
@@ -75,40 +75,52 @@ app.use(hpp());
 app.use(cors());
 
 //Mount routers
-app.use('/api/v1/auth',authRouter);
-app.use('/api/v1/projects', projectRouter);
-app.use('/api/v1/users', userRouter);
-app.use('/api/v1/versions', versionRouter); 
-app.use('/api/v1/', elementRouter);
-app.use('/api/v1/comments', commentRouter);
+app.use("/api/v1/auth", authRouter);
+app.use("/api/v1/projects", projectRouter);
+app.use("/api/v1/users", userRouter);
+app.use("/api/v1/versions", versionRouter);
+app.use("/api/v1/", elementRouter);
+app.use("/api/v1/comments", commentRouter);
 
 //FRONT Mount routers
-app.use('/project', project);
+app.use("/project", project);
 
 app.use(errorHandler);
 
-
-
-app.use('/graphql', graphqlHttp({
+app.use(
+  "/graphql",
+  graphqlHttp({
     schema: grapqlSchema,
     rootValue: grapqlResolver,
     graphiql: true,
-}));
+    customFormatErrorFn(err) {
+      if (!err.originalError) {
+        return err;
+      }
+      const data = err.originalError.data;
+      const message = err.message || "An error occured.";
+      const code = err.originalError.code || 500;
+      return { message, status: code, data };
+    }
+  })
+);
 
-const PORT = process.env.PORT||5000;
+const PORT = process.env.PORT || 5000;
 
 const server = app.listen(
-    PORT,
-    console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}
-    `.yellow.bold)
-    );
+  PORT,
+  console.log(
+    `Server running in ${process.env.NODE_ENV} mode on port ${PORT}
+    `.yellow.bold
+  )
+);
 
 //Handle unhandled promise rejections
 
-process.on('unhandlerRejection',(err,promise)=> {
-    console.log(`Error: ${err.message}`.red);
+process.on("unhandlerRejection", (err, promise) => {
+  console.log(`Error: ${err.message}`.red);
 
-    //close server and exit process
+  //close server and exit process
 
-    server.close(()=>process.exit(1));
-})
+  server.close(() => process.exit(1));
+});
