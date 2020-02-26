@@ -6,8 +6,7 @@ const morgan = require("morgan");
 const cookieParser = require("cookie-parser");
 const graphqlHttp = require("express-graphql");
 
-const grapqlSchema = require("./graphql/schema");
-const grapqlResolver = require("./graphql/resolvers");
+const schema = require("./graphql/schema");
 
 const connectDB = require("./config/db");
 const errorHandler = require("./middleware/errHandler");
@@ -90,18 +89,8 @@ app.use(errorHandler);
 app.use(
   "/graphql",
   graphqlHttp({
-    schema: grapqlSchema,
-    rootValue: grapqlResolver,
-    graphiql: true,
-    customFormatErrorFn(err) {
-      if (!err.originalError) {
-        return err;
-      }
-      const data = err.originalError.data;
-      const message = err.message || "An error occured.";
-      const code = err.originalError.code || 500;
-      return { message, status: code, data };
-    }
+    schema,
+    graphiql: true
   })
 );
 

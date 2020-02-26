@@ -1,51 +1,85 @@
-const { buildSchema } = require("graphql");
+const {
+  buildSchema,
+  GraphQLBoolean,
+  GraphQLObjectType,
+  GraphQLString,
+  GraphQLSchema,
+  GraphQLID,
+  GraphQLInt,
+  GraphQLList
+} = require("graphql");
 
-module.exports = buildSchema(`
-    type Post {
-        _id: ID!
-        title: String!
-        content: String!
-        imageUrl: String!
-        creator: User!
-        createdAt: String!
-        updateAt: String!
-    }
+const User = require("../models/User");
+const RevitElement = require("../models/RevitElement");
 
-    type User {
-        _id: ID!
-        name: String!
-        password: String!
-        status: String!
-        posts: [Post!]!
-    }
+const HistoryType = new GraphQLObjectType({
+  name: "History",
+  fields: () => ({
+    modifiedAt: { type: GraphQLString },
+    user: { type: GraphQLString },
+    isFirstCommit: { type: GraphQLBoolean },
+    geometryChange: { type: GraphQLBoolean },
+    parameterChange: { type: GraphQLBoolean },
+    sharedParameterChange: { type: GraphQLBoolean }
+  })
+});
 
-    type AuthData {
-        token: String!
-        userId: String!
-    }
+const RevitElementType = new GraphQLObjectType({
+  name: "RevitElement",
+  fields: () => ({
+    id: { type: GraphQLID },
+    project: { type: GraphQLString },
+    version: { type: GraphQLString },
+    guid: { type: GraphQLString },
+    topics: { type: new GraphQLList(GraphQLString) },
+    history: { type: new GraphQLList(HistoryType) },
+    name: { type: GraphQLString },
+    elementId: { type: GraphQLString },
+    category: { type: GraphQLString },
+    level: { type: GraphQLString },
+    parameters: { type: GraphQLString },
+    geometryParameters: { type: GraphQLString },
+    sharedParameters: { type: GraphQLString },
+    worksetId: { type: GraphQLString },
+    location: { type: GraphQLString },
+    boundingBox: { type: GraphQLString },
+    centroid: { type: GraphQLString },
+    typeId: { type: GraphQLString },
+    volume: { type: GraphQLString },
+    createdAt: { type: GraphQLString },
+    updatedAt: { type: GraphQLString }
+  })
+});
 
+const RootQuery = new GraphQLObjectType({
+  name: "RootQueryType",
+  fields: {
+    revitElements: {
+      type: new GraphQLList(RevitElementType),
 
-    input Name {
-        firstName: String!
-        lastName: String!
+      resolve(parent, args, req) {
+        if (!req.isAuth) {
+          throw new Error("Unauthenticated!");
+        }
+        return RevitElement.find({});
+      }
     }
-    input UserInputData {
-        email: String!
-        name: Name!
-        password: String!
-    }
- 
-    type RootQuery {
-        login(email: String!, password: String!): AuthData!
-    }
+  }
+});
 
-
-    type RootMutation {
-        createUser(userInput: UserInputData ): User!
+const Mutation = new GraphQLObjectType({
+  name: "Mutation",
+  fields: {
+    hello: {
+      type: GraphQLString,
+      resolve(parent, args) {
+        return "Hello";
+      }
     }
+  }
+});
 
-    schema { 
-        query: RootQuery
-        mutation: RootMutation
-    }
-`);
+module.exports = new GraphQLSchema({
+  query: RootQuery,
+  mutation: Mutation
+});

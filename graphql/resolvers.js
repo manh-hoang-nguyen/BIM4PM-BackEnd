@@ -1,7 +1,9 @@
 const validator = require("validator");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+
 const User = require("../models/User");
+const RevitElement = require("../models/RevitElement");
 
 module.exports = {
   createUser: async function(args, req) {
@@ -53,5 +55,11 @@ module.exports = {
     const token = user.getSignedJwtToken();
 
     return { token, userId: user._id };
+  },
+
+  revitElements: async function() {
+    const revitElements = await RevitElement.find({});
+
+    return { ...revitElements._doc };
   }
 };
