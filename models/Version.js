@@ -25,7 +25,8 @@ const VersionSchema = mongoose.Schema(
         createdAt: {
           type: Date,
           default: Date.now
-        }
+        },
+        updatedAt: Date
       }
     ]
   },

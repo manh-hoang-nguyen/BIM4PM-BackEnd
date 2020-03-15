@@ -1,9 +1,9 @@
-const validator = require("validator");
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
+const validator = require('validator');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 
-const User = require("../models/User");
-const RevitElement = require("../models/RevitElement");
+const User = require('../models/User');
+const RevitElement = require('../models/RevitElement');
 
 module.exports = {
   createUser: async function(args, req) {
@@ -11,18 +11,18 @@ module.exports = {
     const { name } = userInput;
     const errors = [];
     if (!validator.isEmail(userInput.email)) {
-      errors.push({ message: "Email is invalid." });
+      errors.push({ message: 'Email is invalid.' });
     }
 
     if (
       validator.isEmpty(userInput.password) ||
       !validator.isLength(userInput.password, { min: 8 })
     ) {
-      errors.push({ message: "password too short" });
+      errors.push({ message: 'password too short' });
     }
 
     if (errors.length > 0) {
-      const error = new Error("Invalid input");
+      const error = new Error('Invalid input');
       error.data = errors;
       error.code = 422;
 
@@ -38,16 +38,16 @@ module.exports = {
   },
 
   login: async function({ email, password }) {
-    const user = await User.findOne({ email }).select("+password");
+    const user = await User.findOne({ email }).select('+password');
 
     if (!user) {
-      const error = new Error("User not found");
+      const error = new Error('User not found');
       error.code = 401;
       throw error;
     }
     const isEqual = await bcrypt.compare(password, user.password);
     if (!isEqual) {
-      const error = new Error("Password is incorrect");
+      const error = new Error('Password is incorrect');
       error.code = 401;
       throw error;
     }
@@ -58,8 +58,6 @@ module.exports = {
   },
 
   revitElements: async function() {
-    const revitElements = await RevitElement.find({});
-
-    return { ...revitElements._doc };
+    return RevitElement.find({});
   }
 };

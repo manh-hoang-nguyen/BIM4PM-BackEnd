@@ -7,13 +7,13 @@ const {
   GraphQLID,
   GraphQLInt,
   GraphQLList
-} = require("graphql");
+} = require('graphql');
 
-const User = require("../models/User");
-const RevitElement = require("../models/RevitElement");
+const User = require('../models/User');
+const RevitElement = require('../models/RevitElement');
 
 const HistoryType = new GraphQLObjectType({
-  name: "History",
+  name: 'History',
   fields: () => ({
     modifiedAt: { type: GraphQLString },
     user: { type: GraphQLString },
@@ -25,7 +25,7 @@ const HistoryType = new GraphQLObjectType({
 });
 
 const RevitElementType = new GraphQLObjectType({
-  name: "RevitElement",
+  name: 'RevitElement',
   fields: () => ({
     id: { type: GraphQLID },
     project: { type: GraphQLString },
@@ -52,28 +52,31 @@ const RevitElementType = new GraphQLObjectType({
 });
 
 const RootQuery = new GraphQLObjectType({
-  name: "RootQueryType",
+  name: 'RootQueryType',
   fields: {
     revitElements: {
       type: new GraphQLList(RevitElementType),
-
       resolve(parent, args, req) {
-        if (!req.isAuth) {
-          throw new Error("Unauthenticated!");
-        }
         return RevitElement.find({});
+      }
+    },
+    revitElement: {
+      type: RevitElementType,
+      args: { id: { type: GraphQLID } },
+      resolve(parent, args, req) {
+        return RevitElement.findById(args.id);
       }
     }
   }
 });
 
 const Mutation = new GraphQLObjectType({
-  name: "Mutation",
+  name: 'Mutation',
   fields: {
     hello: {
       type: GraphQLString,
       resolve(parent, args) {
-        return "Hello";
+        return 'Hello';
       }
     }
   }
